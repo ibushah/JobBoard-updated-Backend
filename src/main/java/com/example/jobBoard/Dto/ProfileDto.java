@@ -52,6 +52,10 @@ public class ProfileDto {
     String userType;
 
 
+    String email;
+
+
+
     public ProfileDto() {
     }
 
@@ -173,5 +177,13 @@ public class ProfileDto {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

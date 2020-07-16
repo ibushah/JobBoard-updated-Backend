@@ -24,6 +24,9 @@ public class User {
     @Column
     private String userType;
 
+    @Column
+	private Boolean profileActive;
+
 
     @OneToOne(mappedBy = "user")
     @JsonIgnoreProperties("user")
@@ -93,5 +96,13 @@ public class User {
 
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+
+	public Boolean getProfileActive() {
+		return profileActive;
+	}
+
+	public void setProfileActive(Boolean profileActive) {
+		this.profileActive = profileActive;
 	}
 }
