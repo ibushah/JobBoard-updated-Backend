@@ -3,6 +3,7 @@ package com.example.jobBoard.Model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -31,6 +32,10 @@ public class User {
     @OneToOne(mappedBy = "user")
     @JsonIgnoreProperties("user")
     Profile profile;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    List<Job> jobList;
 
 
     public User() {

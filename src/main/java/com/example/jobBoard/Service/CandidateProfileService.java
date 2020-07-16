@@ -33,6 +33,7 @@ public class CandidateProfileService {
 
             user.setEmail(candidateProfileDTO.getEmail());
             user.setName(candidateProfileDTO.getName());
+            user.setProfileActive(true);
             userDaoRepository.save(user);
             User newUser=userDaoRepository.findById(userId).isPresent()?userDaoRepository.findById(userId).get():null;
 
