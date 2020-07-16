@@ -1,101 +1,58 @@
-package com.example.jobBoard.Model;
+package com.example.jobBoard.Dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class ProfileDto {
 
-import javax.persistence.*;
 
-@Entity
-public class Profile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @Column
     String name;
 
-    @Column(columnDefinition = "LONGTEXT")
+
     String corporateAddress;
 
-    @Column
-    String billingAddress;
+       String billingAddress;
 
-    @Column
+
     String contactName;
 
-    @Column
+
     String contactTitle;
 
-    @Lob
+
     byte[] dp;
 
 
-    @Column
+
     String dpContentType;
 
 
-    @Column
+
     String resumeContentType;
 
-    @Lob
+
     byte[] resume;
 
 
-    @Column
+
     String certificateContentType;
 
-    @Lob
+
     byte[] certificate;
 
 
-    @Column
+
     Double avgRating;
 
 
-    @Column(columnDefinition = "LONGTEXT")
+
     String presentationLetter;
 
-    @Column
+
     String field;
 
-    @Column
     String userType;
 
 
-
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    User user;
-
-    public Profile() {
-    }
-
-    public Profile(String name, String corporateAddress, String billingAddress, String contactName, String contactTitle, byte[] dp, String dpContentType, String resumeContentType, byte[] resume, String certificateContentType, byte[] certificate, Double avgRating, String presentationLetter, String field, String userType, User user) {
-        this.name = name;
-        this.corporateAddress = corporateAddress;
-        this.billingAddress = billingAddress;
-        this.contactName = contactName;
-        this.contactTitle = contactTitle;
-        this.dp = dp;
-        this.dpContentType = dpContentType;
-        this.resumeContentType = resumeContentType;
-        this.resume = resume;
-        this.certificateContentType = certificateContentType;
-        this.certificate = certificate;
-        this.avgRating = avgRating;
-        this.presentationLetter = presentationLetter;
-        this.field = field;
-        this.userType = userType;
-        this.user = user;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public ProfileDto() {
     }
 
     public String getName() {
@@ -209,15 +166,6 @@ public class Profile {
     public void setField(String field) {
         this.field = field;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 
     public String getUserType() {
         return userType;
