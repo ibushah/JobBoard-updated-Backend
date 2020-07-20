@@ -1,5 +1,7 @@
 package com.example.jobBoard.Service;
 
+import com.example.jobBoard.Model.Profile;
+import com.example.jobBoard.Repository.ProfileRepository;
 import com.example.jobBoard.Repository.UserDaoRepository;
 import com.example.jobBoard.Commons.ApiResponse;
 import com.example.jobBoard.Dto.UserDto;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserDaoRepository userDaoRepository;
+
+	@Autowired
+	ProfileRepository profileRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
@@ -83,10 +88,20 @@ public class UserServiceImpl implements UserDetailsService {
 			User newUser = new User();
 			newUser.setEmail(user.getEmail());
 			newUser.setName(user.getName());
-
 			newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 			newUser.setUserType(user.getUserType());
 			newUser.setActive(user.getActive());
+			newUser.setProfileActive(false);
+
+			if(user.getUserType().equals("employer")){
+				Profile companyProfile = new Profile();
+				companyProfile.setUser(newUser);
+				newUser.setName(user.getLegalCompanyName());
+				companyProfile.setName(user.getLegalCompanyName());
+				companyProfile.setContactName(user.getName());
+				newUser.setProfileActive(true);
+				profileRepository.save(companyProfile);
+			}
 			return new ApiResponse<>(HttpStatus.OK.value(), "User saved successfully.",	userDaoRepository.save(newUser));//return ;
 		}else{
 			return new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User Already exsist.",null);//return ;

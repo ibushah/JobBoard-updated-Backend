@@ -7,6 +7,7 @@ public class UserDto {
     private String password;
     private Boolean active ;
     private String userType;
+	private String legalCompanyName;
 
 
 	public UserDto(String name, String email, String password, Boolean active, String userType) {
@@ -15,6 +16,23 @@ public class UserDto {
 		this.password = password;
 		this.active = active;
 		this.userType = userType;
+	}
+
+	public UserDto(String name, String email, String password, Boolean active, String userType, String legalCompanyName) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.active = active;
+		this.userType = userType;
+		this.legalCompanyName = legalCompanyName;
+	}
+
+	public String getLegalCompanyName() {
+		return legalCompanyName;
+	}
+
+	public void setLegalCompanyName(String legalCompanyName) {
+		this.legalCompanyName = legalCompanyName;
 	}
 
 	public UserDto() {

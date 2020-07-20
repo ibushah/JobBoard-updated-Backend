@@ -6,6 +6,23 @@ public class AuthToken {
     private String username;
     private String userType;
     private  String email;
+    private Long id;
+
+    public AuthToken(String token, String username, String userType, String email, Long id) {
+        this.token = token;
+        this.username = username;
+        this.userType = userType;
+        this.email = email;
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public AuthToken(String token, String username, String userType) {
         this.token = token;

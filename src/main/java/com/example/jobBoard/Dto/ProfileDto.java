@@ -5,48 +5,18 @@ public class ProfileDto {
 
 
     String name;
-
-
     String corporateAddress;
-
-       String billingAddress;
-
-
+    String billingAddress;
     String contactName;
-
-
     String contactTitle;
-
-
     byte[] dp;
-
-
-
     String dpContentType;
-
-
-
     String resumeContentType;
-
-
     byte[] resume;
-
-
-
     String certificateContentType;
-
-
     byte[] certificate;
-
-
-
     Double avgRating;
-
-
-
     String presentationLetter;
-
-
     String field;
 
     String userType;
