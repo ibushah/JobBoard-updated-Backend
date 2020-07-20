@@ -37,6 +37,10 @@ public class User {
     @JsonIgnoreProperties("user")
     List<Job> jobList;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    List<RecruiterJob> recruiterJobs;
+
 
     public User() {
     }
@@ -110,4 +114,21 @@ public class User {
 	public void setProfileActive(Boolean profileActive) {
 		this.profileActive = profileActive;
 	}
+
+
+    public List<Job> getJobList() {
+        return jobList;
+    }
+
+    public void setJobList(List<Job> jobList) {
+        this.jobList = jobList;
+    }
+
+    public List<RecruiterJob> getRecruiterJobs() {
+        return recruiterJobs;
+    }
+
+    public void setRecruiterJobs(List<RecruiterJob> recruiterJobs) {
+        this.recruiterJobs = recruiterJobs;
+    }
 }
