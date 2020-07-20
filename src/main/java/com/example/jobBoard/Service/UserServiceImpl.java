@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserDetailsService {
         return userDto;
     }
 
-    public ApiResponse save(UserDto user) {
+	public ApiResponse save(UserDto user) {
 		User founduser = userDaoRepository.findByEmail(user.getEmail());
 		if(founduser == null) {
 			User newUser = new User();
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserDetailsService {
 		}else{
 			return new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User Already exsist.",null);//return ;
 		}
-    }
+	}
 
 
 	public List<User> getActiveUsers(Long id){
