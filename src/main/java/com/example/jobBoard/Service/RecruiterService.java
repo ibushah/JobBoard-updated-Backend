@@ -27,8 +27,6 @@ public class RecruiterService {
 
     public ApiResponse postJob(RecruiterJobDto jobDTO,Long userId) {
 
-
-
        Optional<User> user = userDaoRepository.findById(userId);
 
         if (user != null && user.get().getUserType().equalsIgnoreCase("recruiter")) {
@@ -54,6 +52,35 @@ public class RecruiterService {
 
         return new ApiResponse(500, "Something went wrong", null);
     }
+
+    public ApiResponse updateJob(Long jobId,RecruiterJobDto jobDTO,Long userId) {
+
+        Optional<User> user = userDaoRepository.findById(userId);
+
+        if (user != null && user.get().getUserType().equalsIgnoreCase("recruiter") && user.get().getProfile()!=null) {
+
+            RecruiterJob job = new RecruiterJob();
+            job.setDescription(jobDTO.getDescription());
+            job.setSalary(jobDTO.getSalary());
+            job.setLatitude(jobDTO.getLatitude());
+            job.setLongitude(jobDTO.getLongitude());
+            job.setTitle(jobDTO.getTitle());
+            job.setCity(jobDTO.getCity());
+            job.setCountry(jobDTO.getCountry());
+            job.setProvince(jobDTO.getProvince());
+            job.setCategory(jobDTO.getCategory());
+            job.setType(jobDTO.getType());
+            job.setPublishFrom(jobDTO.getPublishFrom());
+            job.setAddress(jobDTO.getAddress());
+            job.setPublishTo(jobDTO.getPublishTo());
+            job.setUser(user.get());
+            job.setDate(new Date());
+            return new ApiResponse(200, "Recruiter Job successfully updated", recruiterJobRepository.save(job));
+        }
+
+        return new ApiResponse(500, "Something went wrong", null);
+    }
+
 
 
 }

@@ -7,6 +7,9 @@ import com.example.jobBoard.Model.User;
 import com.example.jobBoard.Repository.JobRepository;
 import com.example.jobBoard.Repository.UserDaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -112,6 +115,42 @@ public class JobService {
         return null;
 
     }
+
+    public Page<Job> findByCategory(String cat, int pageNumber,Long userId){
+
+        Optional<User> user = userDaoRepository.findById(userId);
+        Pageable pageable = PageRequest.of(pageNumber,5);
+
+        if(user.get().getUserType().equalsIgnoreCase("candidate")){
+            return jobRepository.findByCategory(cat,pageable);
+        }
+        else{
+
+            return jobRepository.findByCategoryAndCompanyId(cat,userId,pageable);
+
+        }
+
+    }
+
+
+    public ApiResponse deleteJobById(Long userId,Long id,Pageable pageable){
+        Optional<User> user = userDaoRepository.findById(userId);
+        if(user.isPresent()) {
+
+            Boolean jobExist = jobRepository.existsById(id);
+            //first delete a job than then its association
+            if (jobExist) {
+                jobRepository.deleteById(id);
+                //now delete its associations in the applied for table
+                jobRepository.deleteAssociatedRecords(id);
+                return new ApiResponse(200, "Deleted", jobRepository.findJobsByCompanyPaginated(user.get().getId(),pageable));
+            }
+
+        }
+        return new ApiResponse(500,"unsuccessfull",null);
+    }
+
+
 
 
 

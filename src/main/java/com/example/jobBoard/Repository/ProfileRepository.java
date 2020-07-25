@@ -9,4 +9,6 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     @Query(value = "Select * from profile where user_id=:id",nativeQuery = true)
     public Profile findByUserId(@Param("id") Long id);
+
+    public Profile findCompanyProfileByName(String name);
 }
