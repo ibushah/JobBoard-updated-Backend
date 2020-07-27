@@ -126,12 +126,6 @@ public class JobController implements JobSearchSPECIFICATIONS{
         }
 
 
-
-
-
-
-
-
 //        Search by type
         if(type.length()>1 && (company.length()<1 && city.length()<1)){
             return jobRepository.findAll((JobSearchSPECIFICATIONS.hasType(type)),pageable);
