@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -26,7 +27,7 @@ public class User {
     private String userType;
 
     @Column
-	private Boolean profileActive;
+    private Boolean profileActive;
 
 
     @OneToOne(mappedBy = "user")
@@ -37,13 +38,38 @@ public class User {
     @JsonIgnoreProperties("user")
     List<Job> jobList;
 
+    @OneToMany(mappedBy = "candidateProfile", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("candidateProfile")
+    private Set<AppliedFor> AppliedForSet;
+
+    @OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("companyProfile")
+    private Set<AppliedForRecruiterJob> AppliedForRecruiterSet;
+
+
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     List<RecruiterJob> recruiterJobs;
 
 
+
+
+    public User(String email, String name, String password, Boolean active, String userType, Boolean profileActive, Profile profile, List<Job> jobList, Set<AppliedFor> appliedForSet, List<RecruiterJob> recruiterJobs) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.active = active;
+        this.userType = userType;
+        this.profileActive = profileActive;
+        this.profile = profile;
+        this.jobList = jobList;
+        AppliedForSet = appliedForSet;
+        this.recruiterJobs = recruiterJobs;
+    }
+
     public User() {
     }
+
 
     public Long getId() {
         return id;
@@ -95,25 +121,25 @@ public class User {
     }
 
 
-	public Boolean getActive() {
-		return active;
-	}
+    public Boolean getActive() {
+        return active;
+    }
 
-	public Profile getProfile() {
-		return profile;
-	}
+    public Profile getProfile() {
+        return profile;
+    }
 
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 
-	public Boolean getProfileActive() {
-		return profileActive;
-	}
+    public Boolean getProfileActive() {
+        return profileActive;
+    }
 
-	public void setProfileActive(Boolean profileActive) {
-		this.profileActive = profileActive;
-	}
+    public void setProfileActive(Boolean profileActive) {
+        this.profileActive = profileActive;
+    }
 
 
     public List<Job> getJobList() {
@@ -131,4 +157,22 @@ public class User {
     public void setRecruiterJobs(List<RecruiterJob> recruiterJobs) {
         this.recruiterJobs = recruiterJobs;
     }
+
+    public Set<AppliedFor> getAppliedForSet() {
+        return AppliedForSet;
+    }
+
+    public void setAppliedForSet(Set<AppliedFor> appliedForSet) {
+        AppliedForSet = appliedForSet;
+    }
+
+    public Set<AppliedForRecruiterJob> getAppliedForRecruiterSet() {
+        return AppliedForRecruiterSet;
+    }
+
+    public void setAppliedForRecruiterSet(Set<AppliedForRecruiterJob> appliedForRecruiterSet) {
+        AppliedForRecruiterSet = appliedForRecruiterSet;
+    }
 }
+
+

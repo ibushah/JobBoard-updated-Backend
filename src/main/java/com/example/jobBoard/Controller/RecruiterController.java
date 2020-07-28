@@ -57,6 +57,10 @@ public class RecruiterController {
 
         return recruiterJobRepository.findByCategory(category,pageable);
     }
-
+//    @GetMapping("privateJobAllDetails/{jobId}")
+//    public ApiResponse getAllInfoAgainstASingleJob(@PathVariable("jobId") Long jobId){
+//        return recruiterService.getAllInfoOfJobIdForRecruiter(jobId);
+////        return  appliedForRecruiterJobRepository.getAllByCandidateProfile(jobId);
+//    }
 
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Job {
@@ -67,7 +69,34 @@ public class Job {
     @JsonIgnoreProperties("jobList")
     User user;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+    private Set<AppliedFor> AppliedFor = new HashSet<>();
+
     public Job() {
+    }
+
+
+
+
+    public Job(String title, String description, String salary, Date publishFrom, Date publishTo, String country, String city, String province, String category, String type, Double longitude, Double latitude, String address, Date date, Boolean jobPostPermission, User user, Set<com.example.jobBoard.Model.AppliedFor> appliedFor) {
+        this.title = title;
+        this.description = description;
+        this.salary = salary;
+        this.publishFrom = publishFrom;
+        this.publishTo = publishTo;
+        this.country = country;
+        this.city = city;
+        this.province = province;
+        this.category = category;
+        this.type = type;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.address = address;
+        this.date = date;
+        this.jobPostPermission = jobPostPermission;
+        this.user = user;
+        AppliedFor = appliedFor;
     }
 
     public Long getId() {
@@ -204,5 +233,12 @@ public class Job {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public Set<com.example.jobBoard.Model.AppliedFor> getAppliedFor() {
+        return AppliedFor;
+    }
+
+    public void setAppliedFor(Set<com.example.jobBoard.Model.AppliedFor> appliedFor) {
+        AppliedFor = appliedFor;
     }
 }

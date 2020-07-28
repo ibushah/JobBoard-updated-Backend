@@ -3,11 +3,13 @@ package com.example.jobBoard.Controller;
 
 import com.example.jobBoard.Commons.ApiResponse;
 import com.example.jobBoard.Dto.JobDto;
+import com.example.jobBoard.Dto.ReviewAndRatingDTO;
 import com.example.jobBoard.Model.Job;
 import com.example.jobBoard.Model.Profile;
 import com.example.jobBoard.Repository.JobRepository;
 import com.example.jobBoard.Repository.ProfileRepository;
 import com.example.jobBoard.Repository.UserDaoRepository;
+import com.example.jobBoard.Service.AppliedForService;
 import com.example.jobBoard.Service.JobService;
 import com.example.jobBoard.Specifications.JobSearchSPECIFICATIONS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +39,14 @@ public class JobController implements JobSearchSPECIFICATIONS{
     @Autowired
     UserDaoRepository userDaoRepository;
 
+    @Autowired
+    AppliedForService appliedForService;
+
     @PostMapping("/{userId}")
     public ApiResponse postJob(@RequestBody JobDto jobDTO,@PathVariable("userId") Long userId)
     {
         return jobService.postJob(jobDTO,userId);
     }
-
-
-
 
 
     @PutMapping("/update/{userId}/{jobId}")
@@ -53,7 +55,7 @@ public class JobController implements JobSearchSPECIFICATIONS{
         return jobService.updateJOB(jobId,id,jobDTO);
     }
 
-//    Get a single job to
+
     @GetMapping("/")
     public ApiResponse<Job> getJobById(@RequestParam(defaultValue = "1") Long id)
     {
@@ -64,7 +66,7 @@ public class JobController implements JobSearchSPECIFICATIONS{
         }
     }
 
-//    single company all jobs on view job
+
     @GetMapping("/company")
     public List<Job> getJobsByCompany(@RequestParam(defaultValue = "1") Long id)
     {
@@ -74,7 +76,7 @@ public class JobController implements JobSearchSPECIFICATIONS{
 
 
 
-//    company jobs on all jobs
+
     @GetMapping("/myJobs/{userId}")
     public Page<Job> getMyJobs(@PathVariable("userId") Long id,@RequestParam(defaultValue ="0")int page)
     {
@@ -85,7 +87,6 @@ public class JobController implements JobSearchSPECIFICATIONS{
     }
 
 
-//    search by category with pagination
     @GetMapping("/jobsbycategory/{userId}")
     public Page<Job> getJobsByCategory(@PathVariable("userId") Long userId,@RequestParam Map<String,String> requestParams){
         String category=requestParams.get("category");
@@ -96,7 +97,6 @@ public class JobController implements JobSearchSPECIFICATIONS{
     }
 
 
-//    All job from category
     @GetMapping("/paginatedjobs")
     public Page<Job> getAllPaginatedJobs(@RequestParam(defaultValue = "0") int page)
     {
@@ -174,6 +174,12 @@ public class JobController implements JobSearchSPECIFICATIONS{
 //    public ApiResponse deleteJobAndItsAssociations(@PathVariable(name = "jobId") Long jobId,@RequestParam(name = "page") int page){
 //        return  jobService.deleteJobById(jobId,PageRequest.of(page,5));
 //    }
+
+
+    @PostMapping("/applyJob")
+    public ApiResponse applyJobDTOApiResponse(@RequestBody ReviewAndRatingDTO reviewAndRatingDTO){
+        return  appliedForService.applyOnJob(reviewAndRatingDTO);
+    }
 
 
 

@@ -72,9 +72,9 @@ public class RecruiterJob {
     User user;
 
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "recruiterJobs", cascade = CascadeType.ALL)
-//    private Set<AppliedForRecruiterJob> appliedForRecruiterJobs;
+
+    @OneToMany(mappedBy = "recruiterJob", cascade = CascadeType.ALL)
+    private Set<AppliedForRecruiterJob> appliedForRecruiterJobs = new HashSet<>();
 
 
     public RecruiterJob() {
@@ -206,5 +206,13 @@ public class RecruiterJob {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<AppliedForRecruiterJob> getAppliedForRecruiterJobs() {
+        return appliedForRecruiterJobs;
+    }
+
+    public void setAppliedForRecruiterJobs(Set<AppliedForRecruiterJob> appliedForRecruiterJobs) {
+        this.appliedForRecruiterJobs = appliedForRecruiterJobs;
     }
 }
