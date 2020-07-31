@@ -2,20 +2,18 @@ package com.example.jobBoard.Service;
 
 
 import com.example.jobBoard.Commons.ApiResponse;
-import com.example.jobBoard.Dto.AllCandidatesReferedOrNotList;
+import com.example.jobBoard.Dto.ApplyOrReferOnPrivateJobDTO;
 import com.example.jobBoard.Dto.RecruiterJobDto;
-import com.example.jobBoard.Dto.ViewPrivateJobDTO;
+import com.example.jobBoard.Model.AppliedForRecruiterJob;
 import com.example.jobBoard.Model.RecruiterJob;
 import com.example.jobBoard.Model.User;
+import com.example.jobBoard.Repository.AppliedForRecruiterJobRepository;
 import com.example.jobBoard.Repository.RecruiterJobRepository;
 import com.example.jobBoard.Repository.UserDaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,9 +26,12 @@ public class RecruiterService {
     @Autowired
     RecruiterJobRepository recruiterJobRepository;
 
-    public ApiResponse postJob(RecruiterJobDto jobDTO,Long userId) {
+    @Autowired
+    AppliedForRecruiterJobRepository appliedForRecruiterJobRepository;
 
-       Optional<User> user = userDaoRepository.findById(userId);
+    public ApiResponse postJob(RecruiterJobDto jobDTO, Long userId) {
+
+        Optional < User > user = userDaoRepository.findById(userId);
 
         if (user != null && user.get().getUserType().equalsIgnoreCase("recruiter")) {
 
@@ -56,13 +57,13 @@ public class RecruiterService {
         return new ApiResponse(500, "Something went wrong", null);
     }
 
-    public ApiResponse updateJob(Long jobId,RecruiterJobDto jobDTO,Long userId) {
+    public ApiResponse updateJob(Long userId, RecruiterJobDto jobDTO, Long jobId) {
 
-        Optional<User> user = userDaoRepository.findById(userId);
+        Optional < User > user = userDaoRepository.findById(userId);
 
-        if (user != null && user.get().getUserType().equalsIgnoreCase("recruiter") && user.get().getProfile()!=null) {
+        if (user != null && user.get().getUserType().equalsIgnoreCase("recruiter") && user.get().getProfile() != null) {
 
-            RecruiterJob job = new RecruiterJob();
+            RecruiterJob job = recruiterJobRepository.findById(jobId).get();
             job.setDescription(jobDTO.getDescription());
             job.setSalary(jobDTO.getSalary());
             job.setLatitude(jobDTO.getLatitude());
@@ -83,17 +84,74 @@ public class RecruiterService {
 
         return new ApiResponse(500, "Something went wrong", null);
     }
-//    public ApiResponse getAllInfoOfJobIdForRecruiter(Long jobId){
-//
-//
-//        ViewPrivateJobDTO viewPrivateJobDTO = new ViewPrivateJobDTO();
-//        Optional<RecruiterJob> recruiterJob = recruiterJobRepository.findById(jobId);
-//        viewPrivateJobDTO.setRecruiterJob(recruiterJob.get());
-//        List<AllCandidatesReferedOrNotList> allCandidatesReferedOrNotLists = appliedForRecruiterJobRepository.getAllCandidates(jobId);
-//        viewPrivateJobDTO.setAllCandidatesReferedOrNotList(allCandidatesReferedOrNotLists);
-//        return new ApiResponse(200,"SUCCESSFULL",viewPrivateJobDTO);
-//
-//    }
+
+    public ApiResponse referJob(ApplyOrReferOnPrivateJobDTO referJobToCandidateDTO) {
+
+
+
+        Optional < User > companyProfile = userDaoRepository
+                .findById(referJobToCandidateDTO.getCompanyId());
+
+        Optional < RecruiterJob > recruiterJobs = recruiterJobRepository
+                .findById(referJobToCandidateDTO.getJobId());
+
+        if (companyProfile.isPresent() && recruiterJobs.isPresent()) {
+            AppliedForRecruiterJob appliedForRecruiterJob = new AppliedForRecruiterJob();
+            appliedForRecruiterJob.setCompanyProfile(companyProfile.get());
+            appliedForRecruiterJob.setRecruiterJob(recruiterJobs.get());
+
+            appliedForRecruiterJob.setCandidateProfile(userDaoRepository
+                    .findById(referJobToCandidateDTO.getCandidateId()).get());
+
+            appliedForRecruiterJob.setSeenOrNot(false);
+            appliedForRecruiterJob.setApplied(false);
+            appliedForRecruiterJob.setAppliedDate(null);
+            appliedForRecruiterJob.setReferedDate(new Date());
+            appliedForRecruiterJobRepository.save(appliedForRecruiterJob);
+
+
+            return new ApiResponse(200, "SuccessFully refered", true);
+        }
+        return new ApiResponse(500, "ERROR OCCURED", null);
+
+    }
+
+    public ApiResponse applyOnPrivateJob(ApplyOrReferOnPrivateJobDTO applyOrReferOnPrivateJobDTO) {
+
+        AppliedForRecruiterJob appliedForRecruiterJob = appliedForRecruiterJobRepository
+                .alreadyReferedOrNot(applyOrReferOnPrivateJobDTO.getCandidateId(), applyOrReferOnPrivateJobDTO.getCompanyId(), applyOrReferOnPrivateJobDTO.getJobId());
+
+        if (appliedForRecruiterJob != null) {
+            appliedForRecruiterJob.setApplied(true);
+            appliedForRecruiterJob.setAppliedDate(new Date());
+            appliedForRecruiterJobRepository.save(appliedForRecruiterJob);
+
+            //            Notifications notifications = new Notifications();
+            //            notifications.setCandidateId(candId);
+            //            notifications.setCompanyId(referJobToCandidateDTO.getCompanyId());
+            //            notifications.setJobId(referJobToCandidateDTO.getJobId());
+            //            notifications.setNotificateFor("candidate");
+            //            notifications.setNotificationDate(new Date());
+            //            notifications.setSeenOrNot(false);
+            //            notifications.setTypeOfJob("private");
+            //            notificationsRepository.save(notifications);
+
+
+            return new ApiResponse(200, "Successfull", appliedForRecruiterJob);
+        } else {
+            return new ApiResponse(500, "Unsuccessfull", null);
+        }
+    }
+
+
+    public ApiResponse undoRefered(Long jobId, Long candidateId) {
+        appliedForRecruiterJobRepository.undoRefer(jobId, candidateId);
+        return new ApiResponse(200, "Successfull", "ok");
+    }
+
+
+
+
 
 
 }

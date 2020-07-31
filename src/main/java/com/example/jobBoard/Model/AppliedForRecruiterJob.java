@@ -19,7 +19,7 @@ public class AppliedForRecruiterJob {
     private RecruiterJob recruiterJob;
 
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name="candidate_id")
     @JsonIgnoreProperties("AppliedForRecruiterSet")

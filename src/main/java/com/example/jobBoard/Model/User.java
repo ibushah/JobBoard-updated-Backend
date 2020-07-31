@@ -1,5 +1,6 @@
 package com.example.jobBoard.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ public class User {
     @OneToMany(mappedBy = "candidateProfile", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("candidateProfile")
     private Set<AppliedFor> AppliedForSet;
+
 
     @OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("companyProfile")

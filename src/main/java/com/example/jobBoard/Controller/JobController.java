@@ -12,6 +12,7 @@ import com.example.jobBoard.Repository.UserDaoRepository;
 import com.example.jobBoard.Service.AppliedForService;
 import com.example.jobBoard.Service.JobService;
 import com.example.jobBoard.Specifications.JobSearchSPECIFICATIONS;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -170,15 +172,26 @@ public class JobController implements JobSearchSPECIFICATIONS{
     }
 
 
-//    @DeleteMapping("/delete/{jobId}/page")
-//    public ApiResponse deleteJobAndItsAssociations(@PathVariable(name = "jobId") Long jobId,@RequestParam(name = "page") int page){
-//        return  jobService.deleteJobById(jobId,PageRequest.of(page,5));
-//    }
+    @DeleteMapping("/delete/{jobId}/{userId}/page")
+    public ApiResponse deleteJobAndItsAssociations(@PathVariable("userId") Long userId,@PathVariable(name = "jobId") Long jobId,@RequestParam(name = "page") int page){
+        return  jobService.deleteJobById(userId,jobId,PageRequest.of(page,5));
+    }
 
 
     @PostMapping("/applyJob")
     public ApiResponse applyJobDTOApiResponse(@RequestBody ReviewAndRatingDTO reviewAndRatingDTO){
         return  appliedForService.applyOnJob(reviewAndRatingDTO);
+    }
+
+
+    @GetMapping("/candidateprofiles/{jobId}")
+    public ApiResponse showCandidateProfileAgainstJobId(@NotNull @Valid @PathVariable(name = "jobId") Long jobId){
+        try {
+            return new ApiResponse(200,"successfull",jobRepository.findAllAppliedUser(jobId));
+        }catch (Exception e){
+            return  new ApiResponse(500,"Error",e);
+        }
+
     }
 
 

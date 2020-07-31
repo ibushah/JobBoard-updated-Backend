@@ -1,6 +1,8 @@
 package com.example.jobBoard.Repository;
 
+import com.example.jobBoard.Dto.UserDto;
 import com.example.jobBoard.Model.Job;
+import com.example.jobBoard.Model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,11 +28,17 @@ public interface JobRepository  extends JpaRepository<Job, Long>, JpaSpecificati
     Page<Job> findByCategory(@Param("cat") String category, Pageable p);
 
 
+
     @Modifying
     @Transactional
-    @Query(value = "DELETE from applied_or_refered_recruiter_jobs where recruiter_jobs_id=:id",nativeQuery = true)
+    @Query(value = "DELETE from applied_for where job_id=:id",nativeQuery = true)
     void deleteAssociatedRecords(@Param("id") Long id);
 
     @Query(value = "select * from job where category=:cat AND user_id=:id", nativeQuery = true)
     Page<Job> findByCategoryAndCompanyId(@Param("cat") String category, @Param("id") Long id, Pageable p);
+
+    @Query(value = "SELECT new com.example.jobBoard.Dto.UserDto(user.id,user.name,user.email,user.userType,user.profileActive)FROM User user\n" +
+            "INNER JOIN AppliedFor ap \n" +
+            "ON user.id = ap.candidateProfile.id where ap.job.id=:id")
+    List<UserDto> findAllAppliedUser(@Param("id") Long id);
 }

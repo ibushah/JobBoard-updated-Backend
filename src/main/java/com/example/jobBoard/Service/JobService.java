@@ -134,8 +134,8 @@ public class JobService {
 
 
     public ApiResponse deleteJobById(Long userId,Long id,Pageable pageable){
-        Optional<User> user = userDaoRepository.findById(userId);
-        if(user.isPresent()) {
+
+            Optional<User> user = userDaoRepository.findById(userId);
 
             Boolean jobExist = jobRepository.existsById(id);
             //first delete a job than then its association
@@ -146,7 +146,7 @@ public class JobService {
                 return new ApiResponse(200, "Deleted", jobRepository.findJobsByCompanyPaginated(user.get().getId(),pageable));
             }
 
-        }
+
         return new ApiResponse(500,"unsuccessfull",null);
     }
 

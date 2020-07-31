@@ -68,7 +68,7 @@ public class RecruiterJob {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("recruiterJobs")
+    @JsonIgnoreProperties("recruiterJob")
     User user;
 
 

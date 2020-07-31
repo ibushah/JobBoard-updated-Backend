@@ -1,41 +1,39 @@
 package com.example.jobBoard.Dto;
 
-public class UserDto {
+import java.io.Serializable;
 
+public class UserDto implements Serializable {
+
+	public Long id;
     private String name;
     private String email;
     private String password;
     private Boolean active ;
     private String userType;
 	private String legalCompanyName;
+	public Boolean profileActive;
 
-
-	public UserDto(String name, String email, String password, Boolean active, String userType) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.active = active;
-		this.userType = userType;
-	}
-
-	public UserDto(String name, String email, String password, Boolean active, String userType, String legalCompanyName) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.active = active;
-		this.userType = userType;
-		this.legalCompanyName = legalCompanyName;
-	}
-
-	public String getLegalCompanyName() {
-		return legalCompanyName;
-	}
-
-	public void setLegalCompanyName(String legalCompanyName) {
-		this.legalCompanyName = legalCompanyName;
-	}
 
 	public UserDto() {
+	}
+
+	public UserDto(Long id, String name, String email, String password, Boolean active, String userType, String legalCompanyName, Boolean profileActive) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.active = active;
+		this.userType = userType;
+		this.legalCompanyName = legalCompanyName;
+		this.profileActive = profileActive;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -62,7 +60,6 @@ public class UserDto {
 		this.password = password;
 	}
 
-
 	public Boolean getActive() {
 		return active;
 	}
@@ -79,5 +76,27 @@ public class UserDto {
 		this.userType = userType;
 	}
 
+	public String getLegalCompanyName() {
+		return legalCompanyName;
+	}
 
+	public void setLegalCompanyName(String legalCompanyName) {
+		this.legalCompanyName = legalCompanyName;
+	}
+
+	public Boolean getProfileActive() {
+		return profileActive;
+	}
+
+	public void setProfileActive(Boolean profileActive) {
+		this.profileActive = profileActive;
+	}
+
+	public UserDto(Long id, String name, String email, String userType, Boolean profileActive) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.userType = userType;
+		this.profileActive = profileActive;
+	}
 }

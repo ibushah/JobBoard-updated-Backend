@@ -2,17 +2,27 @@ package com.example.jobBoard.Controller;
 
 
 import com.example.jobBoard.Commons.ApiResponse;
+import com.example.jobBoard.Dto.ApplyOrReferOnPrivateJobDTO;
 import com.example.jobBoard.Dto.RecruiterJobDto;
+import com.example.jobBoard.Model.Job;
 import com.example.jobBoard.Model.RecruiterJob;
+import com.example.jobBoard.Repository.AppliedForRecruiterJobRepository;
 import com.example.jobBoard.Repository.RecruiterJobRepository;
 import com.example.jobBoard.Service.RecruiterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -26,9 +36,22 @@ public class RecruiterController {
     @Autowired
     RecruiterJobRepository recruiterJobRepository;
 
+    @Autowired
+    AppliedForRecruiterJobRepository appliedForRecruiterJobRepository;
+
     @PostMapping("post/job/{userId}")
     public ApiResponse postRecruiterJob(@RequestBody RecruiterJobDto recruiterProfileDTO,@PathVariable("userId") Long id){
         return recruiterService.postJob(recruiterProfileDTO,id);
+    }
+
+    @GetMapping("/{jobId}")
+    public ResponseEntity<RecruiterJob> getJobById(@NotNull @Valid @PathVariable("jobId") Long jobId){
+        try{
+            Optional<RecruiterJob> job = recruiterJobRepository.findById(jobId);
+            return new ResponseEntity<RecruiterJob>(job.get(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<RecruiterJob>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -41,9 +64,9 @@ public class RecruiterController {
         return  recruiterJobRepository.findAllJobsByRecruiterCompanyId(userId,pageable);
     }
 
-    @PutMapping("update/job/{jobId}/{userId}")
-    public ApiResponse updateRecruiterJob(@PathVariable("jobId") Long jobId,@PathVariable("userId") Long userId,@RequestBody RecruiterJobDto recruiterProfileDTO){
-        return recruiterService.updateJob(jobId,recruiterProfileDTO,userId);
+    @PutMapping("update/job/{userId}/{jobId}")
+    public ApiResponse updateRecruiterJob(@PathVariable("userId") Long userId,@PathVariable("jobId") Long jobId,@RequestBody RecruiterJobDto recruiterProfileDTO){
+        return recruiterService.updateJob(userId,recruiterProfileDTO,jobId);
     }
 
 
@@ -57,10 +80,43 @@ public class RecruiterController {
 
         return recruiterJobRepository.findByCategory(category,pageable);
     }
-//    @GetMapping("privateJobAllDetails/{jobId}")
-//    public ApiResponse getAllInfoAgainstASingleJob(@PathVariable("jobId") Long jobId){
-//        return recruiterService.getAllInfoOfJobIdForRecruiter(jobId);
-////        return  appliedForRecruiterJobRepository.getAllByCandidateProfile(jobId);
-//    }
+
+
+    @PostMapping("apply")
+    public ApiResponse applyOnPrivateJob(@RequestBody ApplyOrReferOnPrivateJobDTO applyOrReferOnPrivateJobDTO){
+        return recruiterService.applyOnPrivateJob(applyOrReferOnPrivateJobDTO);
+    }
+
+
+    @PostMapping("referJobToCandidate")
+    public ApiResponse referRecruiterJobToCandidates(@RequestBody ApplyOrReferOnPrivateJobDTO referJobToCandidateDTO){
+        return recruiterService.referJob(referJobToCandidateDTO);
+    }
+    @GetMapping("notReferedJobs")
+    public ApiResponse getAllNotReferedJobsToSelectedCandidate(@RequestParam Map<String,String> requestParams){
+        Long candId = Long.parseLong(requestParams.get("candId"));
+        Long companyId = Long.parseLong(requestParams.get("companyId"));
+        Integer page=Integer.parseInt(requestParams.get("page"));
+
+        Pageable pageable = PageRequest.of(page,3);
+
+
+        List<Long> idList = appliedForRecruiterJobRepository.getDetails(candId,companyId,pageable);
+        List<RecruiterJob> recruiterJobs = new ArrayList<>();
+        for (Long id:idList) {
+            Optional<RecruiterJob> jobsOptional = recruiterJobRepository.findById(id);
+            if(jobsOptional.isPresent()){
+                recruiterJobs.add(jobsOptional.get()) ;
+            }
+        }
+        return new ApiResponse(200,"Successfull",recruiterJobs);
+    }
+
+    @DeleteMapping("undoRefer/{jobId}/{candId}")
+    public ApiResponse undoReferToCandidate(@PathVariable("jobId") Long jobId,@PathVariable("candId") Long candId){
+        return recruiterService.undoRefered(jobId,candId);
+    }
+
+
 
 }
