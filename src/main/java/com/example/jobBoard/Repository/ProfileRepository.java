@@ -11,4 +11,5 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     public Profile findByUserId(@Param("id") Long id);
 
     public Profile findCompanyProfileByName(String name);
+
 }

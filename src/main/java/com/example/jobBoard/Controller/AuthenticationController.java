@@ -5,7 +5,9 @@ import com.example.jobBoard.Commons.AuthToken;
 import com.example.jobBoard.Config.JwtTokenUtil;
 import com.example.jobBoard.Dto.LoginUser;
 import com.example.jobBoard.Dto.UserDto;
+import com.example.jobBoard.Model.Profile;
 import com.example.jobBoard.Model.User;
+import com.example.jobBoard.Repository.ProfileRepository;
 import com.example.jobBoard.Service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -70,9 +73,14 @@ public class AuthenticationController {
         return this.userService.getActiveUsers(id);
 
     }
+
+    @Autowired
+    ProfileRepository repository;
+
     @GetMapping("/{id}")
     public User getUser(@PathVariable("id") Long id)
     {
+
         return userService.findById(id);
     }
 }
