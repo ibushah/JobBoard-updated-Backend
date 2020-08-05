@@ -38,6 +38,7 @@ public class CompanyProfileService {
             companyProfile.setContactTitle(companyProfileDTO.getContactTitle());
             companyProfile.setCorporateAddress(companyProfileDTO.getCorporateAddress());
             companyProfile.setDp(companyProfileDTO.getDp());
+            companyProfile.setAvgRating(0.0);
             companyProfile.setName(companyProfileDTO.getName());
             companyProfile.setDpContentType(companyProfileDTO.getDpContentType());
             companyProfile.setUser(user);

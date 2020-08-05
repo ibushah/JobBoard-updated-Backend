@@ -1,8 +1,10 @@
 package com.example.jobBoard.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Profile {
@@ -68,7 +70,34 @@ public class Profile {
     @JoinColumn(name = "user_id")
     User user;
 
+    @OneToMany(mappedBy = "companyProfile")
+    @JsonIgnoreProperties("companyProfile")
+    List<ReviewAndRating> reviewAndRatings;
+
+
+    @OneToMany(mappedBy = "candidateProfile")
+    @JsonIgnoreProperties("candidateProfile")
+    List<ReviewAndRating> reviewAndRatingsForCandidate;
+
+
+
     public Profile() {
+    }
+
+    public List<ReviewAndRating> getReviewAndRatingsForCandidate() {
+        return reviewAndRatingsForCandidate;
+    }
+
+    public void setReviewAndRatingsForCandidate(List<ReviewAndRating> reviewAndRatingsForCandidate) {
+        this.reviewAndRatingsForCandidate = reviewAndRatingsForCandidate;
+    }
+
+    public List<ReviewAndRating> getReviewAndRatings() {
+        return reviewAndRatings;
+    }
+
+    public void setReviewAndRatings(List<ReviewAndRating> reviewAndRatings) {
+        this.reviewAndRatings = reviewAndRatings;
     }
 
     public Profile(String name, String corporateAddress, String billingAddress, String contactName, String contactTitle, byte[] dp, String dpContentType, String resumeContentType, byte[] resume, String certificateContentType, byte[] certificate, Double avgRating, String presentationLetter, String field, String userType, User user) {

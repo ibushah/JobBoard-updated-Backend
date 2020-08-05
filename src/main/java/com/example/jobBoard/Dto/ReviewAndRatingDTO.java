@@ -1,5 +1,7 @@
 package com.example.jobBoard.Dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
 public class ReviewAndRatingDTO {
@@ -11,8 +13,13 @@ public class ReviewAndRatingDTO {
     Long companyId;
     Date date;
     String ratedBy;
+    String type;
+    MultipartFile video;
 
-    public ReviewAndRatingDTO(String review, Integer rating, Long candidateId, Long jobId, Long companyId, Date date, String ratedBy) {
+    public ReviewAndRatingDTO() {
+    }
+
+    public ReviewAndRatingDTO(String review, Integer rating, Long candidateId, Long jobId, Long companyId, Date date, String ratedBy, String type, MultipartFile video) {
         this.review = review;
         this.rating = rating;
         this.candidateId = candidateId;
@@ -20,9 +27,8 @@ public class ReviewAndRatingDTO {
         this.companyId = companyId;
         this.date = date;
         this.ratedBy = ratedBy;
-    }
-
-    public ReviewAndRatingDTO() {
+        this.type = type;
+        this.video = video;
     }
 
     public String getReview() {
@@ -79,5 +85,21 @@ public class ReviewAndRatingDTO {
 
     public void setRatedBy(String ratedBy) {
         this.ratedBy = ratedBy;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public MultipartFile getVideo() {
+        return video;
+    }
+
+    public void setVideo(MultipartFile video) {
+        this.video = video;
     }
 }
