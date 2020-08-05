@@ -48,6 +48,7 @@ public class CandidateProfileService {
             candidateProfile.setField(candidateProfileDTO.getField());
             candidateProfile.setResume(candidateProfileDTO.getResume());
             candidateProfile.setDp(candidateProfileDTO.getDp());
+            candidateProfile.setName(user.getName());
             candidateProfile.setUserType("candidate");
             candidateProfile.setAvgRating(0.0);
             candidateProfile.setResumeContentType(candidateProfileDTO.getResumeContentType());
