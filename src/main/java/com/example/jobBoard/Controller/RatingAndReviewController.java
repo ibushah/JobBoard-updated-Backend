@@ -3,8 +3,10 @@ package com.example.jobBoard.Controller;
 
 import com.example.jobBoard.Commons.ApiResponse;
 import com.example.jobBoard.Dto.ReviewAndRatingDTO;
+import com.example.jobBoard.Model.ReviewAndRating;
 import com.example.jobBoard.Model.User;
 import com.example.jobBoard.Repository.ReviewAndRatingRepository;
+import com.example.jobBoard.Repository.UserDaoRepository;
 import com.example.jobBoard.Service.JobService;
 import com.example.jobBoard.Service.ReviewAndRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class RatingAndReviewController {
     @Autowired
     ReviewAndRatingService reviewAndRatingService;
 
+    @Autowired
+    UserDaoRepository userDaoRepository;
 
     @PostMapping("/save/{userId}")
     public ApiResponse saveComment(@RequestParam(required = false,name = "video") MultipartFile videoFile, ReviewAndRatingDTO reviewAndRatingDTO,@PathVariable(name = "userId") Long userId){
@@ -42,6 +46,15 @@ public class RatingAndReviewController {
     @GetMapping("/alreadyCommented/{userId}/{visitedUserId}")
     public ResponseEntity alreadyGivenReviewOrNot(@NotNull @Valid @PathVariable("userId") Long userId,@NotNull @Valid @PathVariable("visitedUserId") Long visitedUserId){
         return reviewAndRatingService.checkStatus(userId,visitedUserId);
+    }
+
+    @GetMapping("/allreviews/{userId}")
+    public ApiResponse getReviewsForUser(@PathVariable("userId") Long userId){
+        Optional<User> user = userDaoRepository.findById(userId);
+        if(user.isPresent() && user.get().getUserType().equalsIgnoreCase("candidate")){
+            return new ApiResponse(200,"Successfull",reviewAndRatingRepository.findReviews(userId,"company"));
+        }
+        return new ApiResponse(200,"Successfull",reviewAndRatingRepository.findReviewsForCompany(userId,"candidate"));
     }
 
 

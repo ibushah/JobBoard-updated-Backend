@@ -50,34 +50,39 @@ public class ReviewAndRatingService {
 
     public ApiResponse saveRatingAndReview(ReviewAndRatingDTO reviewAndRatingDTO,Long userId) {
 
-        Profile candidateProfile = profileRepository.findByUserId(reviewAndRatingDTO.getCandidateId());
-        Profile companyProfile = profileRepository.findByUserId(reviewAndRatingDTO.getCompanyId());
+        Optional<User> candidateUser = userDaoRepository.findById(reviewAndRatingDTO.getCandidateId());
+        Optional<User> companyUser = userDaoRepository.findById(reviewAndRatingDTO.getCompanyId());
         Optional<User> user = userDaoRepository.findById(userId);
         ReviewAndRating reviewAndRatingModel = new ReviewAndRating();
         ReviewAndRating reviewAndRating;
 
         if(reviewAndRatingDTO.getRatedBy().equalsIgnoreCase("candidate")){
-            reviewAndRating= reviewAndRatingRepository.checkReviewStatus(candidateProfile.getId(),companyProfile.getId(),"candidate");
+            reviewAndRating= reviewAndRatingRepository.checkReviewStatus(reviewAndRatingDTO.getCandidateId(),reviewAndRatingDTO.getCompanyId(),"candidate");
         }
         else{
-            reviewAndRating = reviewAndRatingRepository.checkReviewStatus(candidateProfile.getId(),companyProfile.getId(),"company");
+            reviewAndRating = reviewAndRatingRepository.checkReviewStatus(reviewAndRatingDTO.getCandidateId(),reviewAndRatingDTO.getCompanyId(),"company");
             reviewAndRatingDTO.setRatedBy("company");
 
         }if (reviewAndRating == null && reviewAndRatingDTO.getType().equalsIgnoreCase("text")) {
             reviewAndRatingModel.setDate(new Date());
-            reviewAndRatingModel.setCandidateProfile(candidateProfile);
-            reviewAndRatingModel.setCompanyProfile(companyProfile);
+            reviewAndRatingModel.setCandidateProfile(candidateUser.get());
+            reviewAndRatingModel.setCompanyProfile(companyUser.get());
             reviewAndRatingModel.setReview(reviewAndRatingDTO.getReview());
             reviewAndRatingModel.setType(reviewAndRatingDTO.getType());
 
             double rating;
             if(reviewAndRatingDTO.getRatedBy().equalsIgnoreCase("company")){
-                rating = companyProfile.getAvgRating();
+                rating = candidateUser.get().getProfile().getAvgRating();
                 rating = rating + reviewAndRatingDTO.getRating();
+                candidateUser.get().getProfile().setAvgRating(rating);
+                profileRepository.save(candidateUser.get().getProfile());
+
             }
             else{
-                rating = candidateProfile.getAvgRating();
+                rating = companyUser.get().getProfile().getAvgRating();
                 rating = rating + reviewAndRatingDTO.getRating();
+                companyUser.get().getProfile().setAvgRating(rating);
+                profileRepository.save(companyUser.get().getProfile());
             }
 
             reviewAndRatingModel.setRating(reviewAndRatingDTO.getRating());
@@ -92,33 +97,30 @@ public class ReviewAndRatingService {
             if (saveVideoReview(reviewAndRatingDTO.getVideo(), user.get().getName(),user.get().getId(), unique)) {
                 reviewAndRatingModel.setVideoUrl(reviewVideoUrl + user.get().getId() + "-" + user.get().getName() + "/" + unique + reviewAndRatingDTO.getVideo().getOriginalFilename());
                 reviewAndRatingModel.setDate(new Date());
-                reviewAndRatingModel.setCandidateProfile(candidateProfile);
-                reviewAndRatingModel.setCompanyProfile(companyProfile);
+                reviewAndRatingModel.setCandidateProfile(candidateUser.get());
+                reviewAndRatingModel.setCompanyProfile(companyUser.get());
                 reviewAndRatingModel.setType(reviewAndRatingDTO.getType());
 
                 double rating;
                 if(reviewAndRatingDTO.getRatedBy().equalsIgnoreCase("company")){
-                    rating = companyProfile.getAvgRating();
+                    rating = candidateUser.get().getProfile().getAvgRating();
                     rating = rating + reviewAndRatingDTO.getRating();
-                    companyProfile.setAvgRating(rating);
-                    profileRepository.save(companyProfile);
+                    candidateUser.get().getProfile().setAvgRating(rating);
+                    profileRepository.save(candidateUser.get().getProfile());
+
                 }
                 else{
-                    rating = candidateProfile.getAvgRating();
+                    rating = companyUser.get().getProfile().getAvgRating();
                     rating = rating + reviewAndRatingDTO.getRating();
-                    candidateProfile.setAvgRating(rating);
-                    profileRepository.save(companyProfile);
+                    companyUser.get().getProfile().setAvgRating(rating);
+                    profileRepository.save(companyUser.get().getProfile());
                 }
                 reviewAndRatingModel.setRating(reviewAndRatingDTO.getRating());
                 reviewAndRatingModel.setRateBy(reviewAndRatingDTO.getRatedBy());
                 reviewAndRatingRepository.save(reviewAndRatingModel);
-
                 return new ApiResponse(200, "SucesssFull",rating);
             }
-
-
         }
-
         return new ApiResponse(500, "Something went wrong", null);
 
     }

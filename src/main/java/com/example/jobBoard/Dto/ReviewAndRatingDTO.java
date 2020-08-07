@@ -2,9 +2,10 @@ package com.example.jobBoard.Dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReviewAndRatingDTO {
+public class ReviewAndRatingDTO implements Serializable {
 
     String review;
     Integer rating;
@@ -15,8 +16,68 @@ public class ReviewAndRatingDTO {
     String ratedBy;
     String type;
     MultipartFile video;
+    String name;
+    String videoUrl;
+    byte[] dp;
+    Long userId;
+    Double avgRating;
+
+
 
     public ReviewAndRatingDTO() {
+    }
+
+    public ReviewAndRatingDTO(String review, Integer rating, Date date, String ratedBy, String type, String name, String videoUrl, byte[] dp, Long userId,Double avgRating) {
+        this.review = review;
+        this.rating = rating;
+        this.date = date;
+        this.ratedBy = ratedBy;
+        this.type = type;
+        this.name = name;
+        this.videoUrl = videoUrl;
+        this.dp = dp;
+        this.userId = userId;
+        this.avgRating = avgRating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Double avgRating) {
+        this.avgRating = avgRating;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public byte[] getDp() {
+        return dp;
+    }
+
+    public void setDp(byte[] dp) {
+        this.dp = dp;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public ReviewAndRatingDTO(String review, Integer rating, Long candidateId, Long jobId, Long companyId, Date date, String ratedBy, String type, MultipartFile video) {

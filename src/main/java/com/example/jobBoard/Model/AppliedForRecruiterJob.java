@@ -25,7 +25,6 @@ public class AppliedForRecruiterJob {
     @JsonIgnoreProperties("AppliedForRecruiterSet")
     User candidateProfile;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="company_id")
     @JsonIgnoreProperties("AppliedForRecruiterSet")

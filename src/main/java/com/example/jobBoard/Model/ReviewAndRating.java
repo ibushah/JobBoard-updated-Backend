@@ -28,15 +28,16 @@ public class ReviewAndRating {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
-    @JsonIgnoreProperties("reviewAndRatings")
-    Profile companyProfile;
+//    @JsonIgnoreProperties("reviewAndRatings")
+    User companyProfile;
+
 
 
 
     @ManyToOne
     @JoinColumn(name = "candidate_id")
-    @JsonIgnoreProperties("reviewAndRatingsForCandidate")
-    Profile candidateProfile;
+//    @JsonIgnoreProperties("reviewAndRatingsForCandidate")
+    User candidateProfile;
 
     public ReviewAndRating() {
     }
@@ -50,7 +51,7 @@ public class ReviewAndRating {
         this.videoUrl = videoUrl;
     }
 
-    public ReviewAndRating(String review, Integer rating, String rateBy, Date date, String type, String videoUrl, Profile companyProfile, Profile candidateProfile) {
+    public ReviewAndRating(String review, Integer rating, String rateBy, Date date, String type, String videoUrl, User companyProfile, User candidateProfile) {
         this.review = review;
         this.rating = rating;
         this.rateBy = rateBy;
@@ -117,19 +118,19 @@ public class ReviewAndRating {
         this.videoUrl = videoUrl;
     }
 
-    public Profile getCompanyProfile() {
+    public User getCompanyProfile() {
         return companyProfile;
     }
 
-    public void setCompanyProfile(Profile companyProfile) {
+    public void setCompanyProfile(User companyProfile) {
         this.companyProfile = companyProfile;
     }
 
-    public Profile getCandidateProfile() {
+    public User getCandidateProfile() {
         return candidateProfile;
     }
 
-    public void setCandidateProfile(Profile candidateProfile) {
+    public void setCandidateProfile(User candidateProfile) {
         this.candidateProfile = candidateProfile;
     }
 }

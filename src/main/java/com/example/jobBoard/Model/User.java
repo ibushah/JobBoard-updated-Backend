@@ -54,6 +54,16 @@ public class User {
     List<RecruiterJob> recruiterJobs;
 
 
+//    @OneToMany(mappedBy = "companyProfile")
+//    @JsonIgnoreProperties("companyProfile")
+//    List<ReviewAndRating> reviewAndRatings;
+////
+//
+//    @OneToMany(mappedBy = "candidateProfile")
+//    @JsonIgnoreProperties("candidateProfile")
+//    List<ReviewAndRating> reviewAndRatingsForCandidate;
+
+
 
 
     public User(String email, String name, String password, Boolean active, String userType, Boolean profileActive, Profile profile, List<Job> jobList, Set<AppliedFor> appliedForSet, List<RecruiterJob> recruiterJobs) {
@@ -72,6 +82,21 @@ public class User {
     public User() {
     }
 
+//    public List<ReviewAndRating> getReviewAndRatings() {
+//        return reviewAndRatings;
+//    }
+//
+//    public void setReviewAndRatings(List<ReviewAndRating> reviewAndRatings) {
+//        this.reviewAndRatings = reviewAndRatings;
+//    }
+//
+//    public List<ReviewAndRating> getReviewAndRatingsForCandidate() {
+//        return reviewAndRatingsForCandidate;
+//    }
+//
+//    public void setReviewAndRatingsForCandidate(List<ReviewAndRating> reviewAndRatingsForCandidate) {
+//        this.reviewAndRatingsForCandidate = reviewAndRatingsForCandidate;
+//    }
 
     public Long getId() {
         return id;
