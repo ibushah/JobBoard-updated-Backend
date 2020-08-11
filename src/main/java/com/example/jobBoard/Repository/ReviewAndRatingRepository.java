@@ -12,22 +12,22 @@ import java.util.List;
 
 @Repository
 public interface ReviewAndRatingRepository extends JpaRepository<ReviewAndRating,Long> {
-    @Query(value = "select * from review_and_rating where candidate_id=:candId AND company_id=:companyId AND rate_by=:rateBy",nativeQuery = true)
-    ReviewAndRating checkReviewStatus(@Param("candId") Long canId, @Param("companyId") Long companyId, @Param("rateBy") String rateBy);
+    @Query(value = "select * from review_and_rating where reviewer_id=:user1 AND reviewee_id=:user2 AND rate_by=:rateBy",nativeQuery = true)
+    ReviewAndRating checkReviewStatus(@Param("user1") Long user1, @Param("user2") Long user2, @Param("rateBy") String rateBy);
 
 
     @Query(value = "SELECT new com.example.jobBoard.Dto.ReviewAndRatingDTO" +
             "(r.review,r.rating,r.date,r.rateBy,r.type" +
             ",u.name,r.videoUrl,u.profile.dp,u.id,u.profile.avgRating)FROM ReviewAndRating r\n" +
             "INNER JOIN User u \n" +
-            "ON u.id = r.companyProfile.id where r.candidateProfile.id=:id AND r.rateBy=:rateBy")
+            "ON u.id = r.reviewerProfile.id where r.revieweeProfile.id=:id AND r.rateBy=:rateBy")
     List<ReviewAndRatingDTO> findReviews(@Param("id") Long id, @Param("rateBy") String rateBy);
 
     @Query(value = "SELECT new com.example.jobBoard.Dto.ReviewAndRatingDTO" +
             "(r.review,r.rating,r.date,r.rateBy,r.type" +
             ",u.name,r.videoUrl,u.profile.dp,u.id,u.profile.avgRating)FROM ReviewAndRating r\n" +
             "INNER JOIN User u \n" +
-            "ON u.id = r.candidateProfile.id where (r.companyProfile.id=:id AND r.rateBy=:rateBy)")
+            "ON u.id = r.reviewerProfile.id where (r.revieweeProfile.id=:id AND r.rateBy=:rateBy)")
     List<ReviewAndRatingDTO> findReviewsForCompany(@Param("id") Long id, @Param("rateBy") String rateBy);
 
 }

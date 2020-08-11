@@ -60,13 +60,19 @@ public class ReviewAndRatingService {
             reviewAndRating= reviewAndRatingRepository.checkReviewStatus(reviewAndRatingDTO.getCandidateId(),reviewAndRatingDTO.getCompanyId(),"candidate");
         }
         else{
-            reviewAndRating = reviewAndRatingRepository.checkReviewStatus(reviewAndRatingDTO.getCandidateId(),reviewAndRatingDTO.getCompanyId(),"company");
+            reviewAndRating = reviewAndRatingRepository.checkReviewStatus(reviewAndRatingDTO.getCompanyId(),reviewAndRatingDTO.getCandidateId(),"company");
             reviewAndRatingDTO.setRatedBy("company");
 
         }if (reviewAndRating == null && reviewAndRatingDTO.getType().equalsIgnoreCase("text")) {
             reviewAndRatingModel.setDate(new Date());
-            reviewAndRatingModel.setCandidateProfile(candidateUser.get());
-            reviewAndRatingModel.setCompanyProfile(companyUser.get());
+            if(reviewAndRatingDTO.getRatedBy().equalsIgnoreCase("company")){
+                reviewAndRatingModel.setReviewerProfile(companyUser.get());
+                reviewAndRatingModel.setRevieweeProfile(candidateUser.get());
+            }
+            reviewAndRatingModel.setReviewerProfile(candidateUser.get());
+            reviewAndRatingModel.setRevieweeProfile(companyUser.get());
+
+
             reviewAndRatingModel.setReview(reviewAndRatingDTO.getReview());
             reviewAndRatingModel.setType(reviewAndRatingDTO.getType());
 
@@ -97,8 +103,12 @@ public class ReviewAndRatingService {
             if (saveVideoReview(reviewAndRatingDTO.getVideo(), user.get().getName(),user.get().getId(), unique)) {
                 reviewAndRatingModel.setVideoUrl(reviewVideoUrl + user.get().getId() + "-" + user.get().getName() + "/" + unique + reviewAndRatingDTO.getVideo().getOriginalFilename());
                 reviewAndRatingModel.setDate(new Date());
-                reviewAndRatingModel.setCandidateProfile(candidateUser.get());
-                reviewAndRatingModel.setCompanyProfile(companyUser.get());
+                if(reviewAndRatingDTO.getRatedBy().equalsIgnoreCase("company")){
+                    reviewAndRatingModel.setReviewerProfile(companyUser.get());
+                    reviewAndRatingModel.setRevieweeProfile(candidateUser.get());
+                }
+                reviewAndRatingModel.setReviewerProfile(candidateUser.get());
+                reviewAndRatingModel.setRevieweeProfile(companyUser.get());
                 reviewAndRatingModel.setType(reviewAndRatingDTO.getType());
 
                 double rating;
@@ -176,13 +186,12 @@ public class ReviewAndRatingService {
 
 //            check the candidate give review to the company or not
             if(userOptional.get().getUserType().equalsIgnoreCase("candidate")){
-                reviewAndRating= reviewAndRatingRepository.checkReviewStatus(userOptional.get().getProfile().getId(),visitedUserProfile.get().getProfile().getId(),"candidate");
+                reviewAndRating= reviewAndRatingRepository.checkReviewStatus(userOptional.get().getId(),visitedUserProfile.get().getId(),"candidate");
             }
 //            check the company give review to the candidate or not
             else{
-                reviewAndRating = reviewAndRatingRepository.checkReviewStatus(visitedUserProfile.get().getProfile().getId(),userOptional.get().getProfile().getId(),"company");
+                reviewAndRating = reviewAndRatingRepository.checkReviewStatus(userOptional.get().getId(),visitedUserProfile.get().getId(),"company");
             }
-
 
             if(reviewAndRating!=null){
                 return new ResponseEntity<>("\"Already_reported\"", HttpStatus.ALREADY_REPORTED);

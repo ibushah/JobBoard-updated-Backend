@@ -27,17 +27,17 @@ public class ReviewAndRating {
 
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "reviewer_id")
 //    @JsonIgnoreProperties("reviewAndRatings")
-    User companyProfile;
+    User reviewerProfile;
 
 
 
 
     @ManyToOne
-    @JoinColumn(name = "candidate_id")
+    @JoinColumn(name = "reviewee_id")
 //    @JsonIgnoreProperties("reviewAndRatingsForCandidate")
-    User candidateProfile;
+    User revieweeProfile;
 
     public ReviewAndRating() {
     }
@@ -51,15 +51,15 @@ public class ReviewAndRating {
         this.videoUrl = videoUrl;
     }
 
-    public ReviewAndRating(String review, Integer rating, String rateBy, Date date, String type, String videoUrl, User companyProfile, User candidateProfile) {
+    public ReviewAndRating(String review, Integer rating, String rateBy, Date date, String type, String videoUrl, User reviewerProfile, User revieweeProfile) {
         this.review = review;
         this.rating = rating;
         this.rateBy = rateBy;
         this.date = date;
         this.type = type;
         this.videoUrl = videoUrl;
-        this.companyProfile = companyProfile;
-        this.candidateProfile = candidateProfile;
+        this.reviewerProfile = reviewerProfile;
+        this.revieweeProfile = revieweeProfile;
     }
 
     public Long getId() {
@@ -118,19 +118,19 @@ public class ReviewAndRating {
         this.videoUrl = videoUrl;
     }
 
-    public User getCompanyProfile() {
-        return companyProfile;
+    public User getReviewerProfile() {
+        return reviewerProfile;
     }
 
-    public void setCompanyProfile(User companyProfile) {
-        this.companyProfile = companyProfile;
+    public void setReviewerProfile(User reviewerProfile) {
+        this.reviewerProfile = reviewerProfile;
     }
 
-    public User getCandidateProfile() {
-        return candidateProfile;
+    public User getRevieweeProfile() {
+        return revieweeProfile;
     }
 
-    public void setCandidateProfile(User candidateProfile) {
-        this.candidateProfile = candidateProfile;
+    public void setRevieweeProfile(User revieweeProfile) {
+        this.revieweeProfile = revieweeProfile;
     }
 }
