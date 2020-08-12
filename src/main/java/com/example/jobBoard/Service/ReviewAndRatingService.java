@@ -69,8 +69,11 @@ public class ReviewAndRatingService {
                 reviewAndRatingModel.setReviewerProfile(companyUser.get());
                 reviewAndRatingModel.setRevieweeProfile(candidateUser.get());
             }
-            reviewAndRatingModel.setReviewerProfile(candidateUser.get());
-            reviewAndRatingModel.setRevieweeProfile(companyUser.get());
+            else{
+
+                reviewAndRatingModel.setReviewerProfile(candidateUser.get());
+                reviewAndRatingModel.setRevieweeProfile(companyUser.get());
+            }
 
 
             reviewAndRatingModel.setReview(reviewAndRatingDTO.getReview());
@@ -107,8 +110,11 @@ public class ReviewAndRatingService {
                     reviewAndRatingModel.setReviewerProfile(companyUser.get());
                     reviewAndRatingModel.setRevieweeProfile(candidateUser.get());
                 }
-                reviewAndRatingModel.setReviewerProfile(candidateUser.get());
-                reviewAndRatingModel.setRevieweeProfile(companyUser.get());
+                else{
+
+                    reviewAndRatingModel.setReviewerProfile(candidateUser.get());
+                    reviewAndRatingModel.setRevieweeProfile(companyUser.get());
+                }
                 reviewAndRatingModel.setType(reviewAndRatingDTO.getType());
 
                 double rating;
@@ -186,11 +192,11 @@ public class ReviewAndRatingService {
 
 //            check the candidate give review to the company or not
             if(userOptional.get().getUserType().equalsIgnoreCase("candidate")){
-                reviewAndRating= reviewAndRatingRepository.checkReviewStatus(userOptional.get().getId(),visitedUserProfile.get().getId(),"candidate");
+                reviewAndRating= reviewAndRatingRepository.checkReviewStatus(userId,visitedUserId,"candidate");
             }
 //            check the company give review to the candidate or not
             else{
-                reviewAndRating = reviewAndRatingRepository.checkReviewStatus(userOptional.get().getId(),visitedUserProfile.get().getId(),"company");
+                reviewAndRating = reviewAndRatingRepository.checkReviewStatus(userId,visitedUserId,"company");
             }
 
             if(reviewAndRating!=null){
