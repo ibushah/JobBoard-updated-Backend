@@ -16,9 +16,10 @@ import java.util.Optional;
 @Repository
 public interface AppliedForRecruiterJobRepository extends JpaRepository<AppliedForRecruiterJob,Long>
 {
-    @Query(value = "select * from applied_or_refered_recruiter_jobs where (candidate_id=:candId AND company_id=:companyId AND recruiter_job_id=:jobId)",nativeQuery = true)
-    AppliedForRecruiterJob alreadyReferedOrNot(@Param("candId") Long candId, @Param("companyId") Long companyId,
-                                      @Param("jobId") Long jobId);
+    @Query(value = "select * from applied_or_refered_recruiter_jobs where " +
+            "(candidate_id=:candId AND company_id=:companyId AND recruiter_job_id=:jobId)",nativeQuery = true)
+    AppliedForRecruiterJob alreadyReferedOrNot(@Param("candId") Long candId,
+                                               @Param("companyId") Long companyId,@Param("jobId") Long jobId);
 
     Optional<AppliedForRecruiterJob> findByCandidateProfileIdAndCompanyProfileIdAndRecruiterJobIdAndIsApplied(Long candId, Long compId, Long jobId, Boolean applied);
 
@@ -33,4 +34,8 @@ public interface AppliedForRecruiterJobRepository extends JpaRepository<AppliedF
             "WHERE ref.recruiter_job_id is NULL",
             nativeQuery = true)
     public List<Long> getDetails(@Param("candId") Long candId, @Param("companyId") Long companyId, Pageable pageable);
+
+    @Query(value = "select  is_applied from applied_or_refered_recruiter_jobs where (candidate_id=:candId AND recruiter_job_id=:jobId)",nativeQuery = true)
+    Boolean isAlreadyApplied(@Param("candId") Long candId,
+                             @Param("jobId") Long jobId);
 }

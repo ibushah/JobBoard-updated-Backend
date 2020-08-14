@@ -5,9 +5,11 @@ import com.example.jobBoard.Commons.ApiResponse;
 import com.example.jobBoard.Dto.ReviewAndRatingDTO;
 import com.example.jobBoard.Model.AppliedFor;
 import com.example.jobBoard.Model.Job;
+import com.example.jobBoard.Model.Notifications;
 import com.example.jobBoard.Model.User;
 import com.example.jobBoard.Repository.AppliedForRepository;
 import com.example.jobBoard.Repository.JobRepository;
+import com.example.jobBoard.Repository.NotificationRepository;
 import com.example.jobBoard.Repository.UserDaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,14 @@ public class AppliedForService {
 
     @Autowired
     JobRepository jobRepository;
+
+    @Autowired
+    NotificationRepository notificationsRepository;
+
     public ApiResponse applyOnJob(ReviewAndRatingDTO reviewAndRatingDTO) {
 
         Optional < User > candidateProfile = userDaoRepository.findById(reviewAndRatingDTO.getCandidateId());
-        Optional < User > companyProfile = userDaoRepository.findById(reviewAndRatingDTO.getCandidateId());
+        Optional < User > companyProfile = userDaoRepository.findById(reviewAndRatingDTO.getCompanyId());
         Optional < Job > job = jobRepository.findById(reviewAndRatingDTO.getJobId());
 
         if (candidateProfile != null && candidateProfile.get().getUserType().equalsIgnoreCase("candidate") && candidateProfile.get().getProfile() != null) {
@@ -36,9 +42,21 @@ public class AppliedForService {
             AppliedFor appliedForPresent = appliedForRepository.applied(reviewAndRatingDTO.getJobId(), reviewAndRatingDTO.getCandidateId());
             if (appliedForPresent == null) {
                 AppliedFor appliedFor = new AppliedFor(job.get(), candidateProfile.get(), companyProfile.get(), false, new Date());
+                Notifications notifications = new Notifications();
+                notifications.setNotificationByUser(candidateProfile.get());
+                notifications.setNotificationForUser(companyProfile.get());
+                notifications.setJob(job.get());
+                notifications.setNotificateFor("notcandidate");
+                notifications.setNotificationDate(new Date());
+                notifications.setSeenOrNot(false);
+                notifications.setTypeOfJob("public");
+                notificationsRepository.save(notifications);
                 appliedForRepository.save(appliedFor);
+
                 return new ApiResponse(200, "You have successfully applied for the job",appliedFor);
-            } else {
+            }
+
+            else {
                 return new ApiResponse(400, "You have already applied for this job", null);
             }
         }
@@ -46,18 +64,7 @@ public class AppliedForService {
 
         return new ApiResponse(400, "Something went wrong", null);
 
-        //            Optional<Job> job = jobRepository.findById(reviewAndRatingDTO.getJobId());
-        //            CandidateProfile candidateProfile = user.getCandidateProfile();
-        //
-        //            Notifications notifications = new Notifications();
-        //            notifications.setCandidateId(candidateProfile.getId());
-        //            notifications.setCompanyId(reviewAndRatingDTO.getCompanyId());
-        //            notifications.setJobId(reviewAndRatingDTO.getJobId());
-        //            notifications.setNotificateFor("notcandidate");
-        //            notifications.setNotificationDate(new Date());
-        //            notifications.setSeenOrNot(false);
-        //            notifications.setTypeOfJob("public");
-        //            notificationsRepository.save(notifications);
+
 
 
 

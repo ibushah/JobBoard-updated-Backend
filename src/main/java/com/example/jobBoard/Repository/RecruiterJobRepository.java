@@ -18,4 +18,6 @@ public interface RecruiterJobRepository extends JpaRepository<RecruiterJob,Long>
 
     @Query(value = "select * from recruiter_jobs where category=:cat",nativeQuery = true)
     Page<RecruiterJob> findByCategory(@Param("cat") String category, Pageable pageable);
+
+
 }

@@ -49,6 +49,7 @@ public class User {
     private Set<AppliedForRecruiterJob> AppliedForRecruiterSet;
 
 
+
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     List<RecruiterJob> recruiterJobs;

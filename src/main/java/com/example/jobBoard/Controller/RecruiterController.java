@@ -49,9 +49,16 @@ public class RecruiterController {
         try{
             Optional<RecruiterJob> job = recruiterJobRepository.findById(jobId);
             return new ResponseEntity<RecruiterJob>(job.get(), HttpStatus.OK);
-        }catch (Exception e){
+        }
+        catch (Exception e){
             return new ResponseEntity<RecruiterJob>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/alreadyApplied/{userId}/{jobId}")
+    public Boolean alreadyApplied(@NotNull @Valid @PathVariable("userId") Long userId,@NotNull @Valid @PathVariable("jobId") Long jobId){
+            Boolean alreadyApplied = appliedForRecruiterJobRepository.isAlreadyApplied(userId,jobId);
+            return  alreadyApplied;
     }
 
 
