@@ -13,15 +13,15 @@ import java.util.List;
 
 public interface MeetingRoomRepository extends JpaRepository<MeetingRoom, Long> {
 
-    @Query("select new com.example.excelProj.Dto.MeetingDto(m.id,m.user2,m.meetingId,m.status,m.self,m.seen,m.date)" +
+    @Query("select new com.example.jobBoard.Dto.MeetingDto(m.id,m.user2,m.meetingId,m.status,m.self,m.seen,m.date)" +
             " from User u join MeetingRoom m on m.user1.id=u.id where m.user1.id=:id")
     List<MeetingDto> findAllMeetings(@Param("id") Long id);
 
-    @Query("select new com.example.excelProj.Dto.MeetingDto(m.id,m.user2,m.meetingId,m.status,m.self,m.seen,m.date)" +
+    @Query("select new com.example.jobBoard.Dto.MeetingDto(m.id,m.user2,m.meetingId,m.status,m.self,m.seen,m.date)" +
             " from User u join MeetingRoom m on m.user1.id=u.id where m.status=:filter and  m.user1.id=:id")
     List<MeetingDto> filteredMeetings(@Param("id") Long id, @Param("filter") String filter);
 
-    @Query("select new com.example.excelProj.Dto.MeetingDto(m.id,m.user2,m.meetingId,m.status,m.self,m.seen,m.date)" +
+    @Query("select new com.example.jobBoard.Dto.MeetingDto(m.id,m.user2,m.meetingId,m.status,m.self,m.seen,m.date)" +
             " from User u join MeetingRoom m on m.user1.id=u.id where m.status=:filter and m.self=:my and  m.user1.id=:id ")
     List<MeetingDto> filteredMeetingsWithSelf(@Param("id") Long id, @Param("filter") String filter, @Param("my") Boolean my);
 

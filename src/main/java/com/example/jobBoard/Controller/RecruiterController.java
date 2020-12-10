@@ -4,10 +4,13 @@ package com.example.jobBoard.Controller;
 import com.example.jobBoard.Commons.ApiResponse;
 import com.example.jobBoard.Dto.ApplyOrReferOnPrivateJobDTO;
 import com.example.jobBoard.Dto.RecruiterJobDto;
+import com.example.jobBoard.Dto.SearchUserDTO;
 import com.example.jobBoard.Model.Job;
 import com.example.jobBoard.Model.RecruiterJob;
+import com.example.jobBoard.Model.User;
 import com.example.jobBoard.Repository.AppliedForRecruiterJobRepository;
 import com.example.jobBoard.Repository.RecruiterJobRepository;
+import com.example.jobBoard.Repository.UserDaoRepository;
 import com.example.jobBoard.Service.RecruiterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/recruiter/")
 public class RecruiterController {
+
+
+    @Autowired
+    UserDaoRepository userDaoRepository;
 
 
     @Autowired
@@ -123,6 +130,45 @@ public class RecruiterController {
     public ApiResponse undoReferToCandidate(@PathVariable("jobId") Long jobId,@PathVariable("candId") Long candId){
         return recruiterService.undoRefered(jobId,candId);
     }
+
+    @GetMapping("search")
+    public ApiResponse searchAllCandidates(@RequestParam("search") String searchString){
+
+
+
+        List<User> foundUsers  =  userDaoRepository.searchUser(searchString) ;
+        List<SearchUserDTO> searchUserDTOS = new ArrayList<>();
+
+        for (User u:foundUsers) {
+
+            SearchUserDTO userDTO = new SearchUserDTO();
+
+
+            userDTO.setDp(null);
+            userDTO.setProfileId(null);
+            userDTO.setName(u.getName());
+            userDTO.setUserId(u.getId());
+            userDTO.setUserType(u.getUserType());
+
+            if(u.getUserType().equalsIgnoreCase("candidate") && u.getProfile()!=null){
+
+
+                userDTO.setDp(u.getProfile().getDp());
+                userDTO.setProfileId(u.getProfile().getId());
+
+            }
+            else if(u.getProfile()!=null){
+
+                userDTO.setDp(u.getProfile().getDp());
+                userDTO.setProfileId(u.getProfile().getId());
+            }
+
+            searchUserDTOS.add(userDTO);
+        }
+        return new ApiResponse(200,"Successfull",searchUserDTOS);
+    }
+
+
 
 
 
