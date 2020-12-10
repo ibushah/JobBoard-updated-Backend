@@ -32,11 +32,11 @@ public class TenderController {
     @Autowired
     TenderService tenderService;
 
-    @GetMapping("/tender/all/{tenderType}/{id}")
-    public ResponseEntity<List<Tender>> getAllTenders(@PathVariable("tenderType") String tenderType,@PathVariable("id") Long id)
+    @GetMapping("/tender/all/{id}")
+    public ResponseEntity<List<Tender>> getAllTenders(@PathVariable("id") Long id)
     {
 
-       List<Tender> tenderList = tenderRepository.getAllPublicTenders(tenderType,id);
+       List<Tender> tenderList = tenderRepository.getTenders(id);
         return new ResponseEntity<List<Tender>>(tenderList, HttpStatus.OK);
     }
 
@@ -72,6 +72,15 @@ public class TenderController {
     @GetMapping("/tendernotification/employer/{employerUserId}")
     public ResponseEntity<List<TenderAssortments>> sendNotificationToEmployerAboutAcceptOrDecline(@PathVariable("employerUserId") Long employerUserId){
         return tenderService.sendNotificationToEmployerAboutAcceptOrDecline(employerUserId);
+    }
+
+
+
+    public ApiResponse ageValidator(int age){
+        if(age>=18) {
+            return new ApiResponse(200,"CORRECT AGE",null);
+        }
+        return new ApiResponse(400,"CORRECT AGE",null);
     }
 
 

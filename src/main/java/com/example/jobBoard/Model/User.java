@@ -201,6 +201,8 @@ public class User {
     public void setAppliedForRecruiterSet(Set<AppliedForRecruiterJob> appliedForRecruiterSet) {
         AppliedForRecruiterSet = appliedForRecruiterSet;
     }
+
+
 }
 
 
