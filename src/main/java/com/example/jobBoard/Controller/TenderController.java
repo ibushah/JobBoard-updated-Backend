@@ -32,7 +32,7 @@ public class TenderController {
     @Autowired
     TenderService tenderService;
 
-    @GetMapping("/tender/all/{id}")
+    @GetMapping("/tender/allById/{id}")
     public ResponseEntity<List<Tender>> getAllTenders(@PathVariable("id") Long id)
     {
 
@@ -40,7 +40,7 @@ public class TenderController {
         return new ResponseEntity<List<Tender>>(tenderList, HttpStatus.OK);
     }
 
-    @GetMapping("/tender/all/{tenderType}")
+    @GetMapping("/tender/allByType/{tenderType}")
     public ResponseEntity<List<Tender>> getAllTenders(@PathVariable("tenderType") String tenderType)
     {
 
