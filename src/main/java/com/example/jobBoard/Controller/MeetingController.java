@@ -2,6 +2,7 @@ package com.example.jobBoard.Controller;
 
 
 import com.example.jobBoard.Dto.ChatDTO;
+import com.example.jobBoard.Dto.InvitationDto;
 import com.example.jobBoard.Dto.LocationDto;
 import com.example.jobBoard.Model.Chat;
 import com.example.jobBoard.Model.Location;
@@ -42,9 +43,9 @@ public class MeetingController {
 
 
 
-    @GetMapping("/invite")
-    public ResponseEntity sendMeetingInvite(@RequestParam("userId") Long userId, @RequestParam("friendId") Long friendId) {
-        return meetingService.sendMeetingInvite(userId, friendId);
+    @PostMapping("/invite")
+    public ResponseEntity sendMeetingInvite(@RequestBody InvitationDto invitationDto) {
+        return meetingService.sendMeetingInvite(invitationDto);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.jobBoard.Service;
 
 
+import com.example.jobBoard.Dto.InvitationDto;
 import com.example.jobBoard.Model.MeetingRoom;
 import com.example.jobBoard.Model.User;
 import com.example.jobBoard.Repository.MeetingRoomRepository;
@@ -22,10 +23,10 @@ public class MeetingService {
     @Autowired
     UserDaoRepository userDaoRepository;
 
-    public ResponseEntity sendMeetingInvite(Long userId, Long friendId) {
+    public ResponseEntity sendMeetingInvite(InvitationDto invitationDto) {
 
-        Optional<User> user1 = userDaoRepository.findById(userId);
-        Optional<User> user2 = userDaoRepository.findById(friendId);
+        Optional<User> user1 = userDaoRepository.findById(invitationDto.getUserId());
+        Optional<User> user2 = userDaoRepository.findById(invitationDto.getFriendId());
 
         if (user1.isPresent() && user2.isPresent()) {
             String uuid = UUID.randomUUID().toString();
@@ -37,6 +38,15 @@ public class MeetingService {
             meetingRoom.setSeen(true);
             meetingRoom.setUser1(user1.get());
             meetingRoom.setUser2(user2.get());
+            meetingRoom.setCity(invitationDto.getCity());
+            meetingRoom.setAddress1(invitationDto.getAddress1());
+            meetingRoom.setAddress2(invitationDto.getAddress2());
+            meetingRoom.setCountry(invitationDto.getCountry());
+            meetingRoom.setComment(invitationDto.getComment());
+            meetingRoom.setLongitude(invitationDto.getLongitude());
+            meetingRoom.setLongitude(invitationDto.getLongitude());
+            meetingRoom.setPostalCode(invitationDto.getPostalCode());
+            meetingRoom.setProvince(invitationDto.getProvince());
 
             //meetingRoom for friend
             MeetingRoom meetingRoom1 = new MeetingRoom();
@@ -47,6 +57,15 @@ public class MeetingService {
             meetingRoom1.setSeen(false);
             meetingRoom1.setUser1(user2.get());
             meetingRoom1.setUser2(user1.get());
+            meetingRoom1.setCity(invitationDto.getCity());
+            meetingRoom1.setAddress1(invitationDto.getAddress1());
+            meetingRoom1.setAddress2(invitationDto.getAddress2());
+            meetingRoom1.setCountry(invitationDto.getCountry());
+            meetingRoom1.setComment(invitationDto.getComment());
+            meetingRoom1.setLongitude(invitationDto.getLongitude());
+            meetingRoom1.setLongitude(invitationDto.getLongitude());
+            meetingRoom1.setPostalCode(invitationDto.getPostalCode());
+            meetingRoom1.setProvince(invitationDto.getProvince());
 
             List<MeetingRoom> list = new ArrayList<>();
             list.add(meetingRoom);
