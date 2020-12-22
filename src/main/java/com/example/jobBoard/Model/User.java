@@ -54,6 +54,10 @@ public class User {
     @JsonIgnoreProperties("user")
     List<RecruiterJob> recruiterJobs;
 
+    @OneToOne
+    @JoinColumn(name = "cv_id")
+    private Circumviate circumviate;
+
 
 //    @OneToMany(mappedBy = "companyProfile")
 //    @JsonIgnoreProperties("companyProfile")
