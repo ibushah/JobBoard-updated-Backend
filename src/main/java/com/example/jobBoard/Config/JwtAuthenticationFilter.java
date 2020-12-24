@@ -27,7 +27,7 @@ import static com.example.jobBoard.Commons.Constants.HEADER_STRING;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Resource(name = "userService")
+    @Autowired
     private UserDetailsService userDetailsService;
     
     @Autowired

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Service(value = "userService")
+@Service(value = "myUserService")
 public class UserServiceImpl implements UserDetailsService {
 	
 	@Autowired

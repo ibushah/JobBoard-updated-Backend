@@ -10,6 +10,7 @@ import com.example.jobBoard.Model.User;
 import com.example.jobBoard.Repository.ProfileRepository;
 import com.example.jobBoard.Service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +32,8 @@ public class AuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
+
+    @Qualifier("myUserService")
     private UserServiceImpl userService;
 
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
