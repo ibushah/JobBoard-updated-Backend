@@ -109,6 +109,23 @@ public class MeetingController {
         }
 
     }
+    @MessageMapping("/riderLocation/{userId}")
+    public void sendMessage(@DestinationVariable("userId") Long userId,
+                            @Payload LocationDto locationDto) {
+
+
+        simpMessagingTemplate.convertAndSend("/topicNew/riderLocation/" + userId, locationDto);
+
+        Optional<User> user = userDaoRepository.findById(userId);
+        Location location=locationRepository.findLocationByUserId(userId);
+        if (user.isPresent()) {
+            if(location!=null)
+                locationRepository.setLongitudeAndLatitude(userId, locationDto.getLongitude(), locationDto.getLatitude());
+            else
+                locationRepository.save(new Location(locationDto.getLongitude(),locationDto.getLatitude(),user.get()));
+        }
+
+    }
 
 
 

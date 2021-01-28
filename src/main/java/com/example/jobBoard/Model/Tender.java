@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Tender{
@@ -57,9 +58,9 @@ public class Tender{
     String address;
 
 
-    @OneToOne(mappedBy = "tender")
+    @OneToMany(mappedBy = "tender")
     @JsonIgnoreProperties("tender")
-    TenderAssortments tenderAssortments;
+    List<TenderAssortments> tenderAssortments;
 
 
 
@@ -93,7 +94,7 @@ public class Tender{
     public Tender() {
     }
 
-    public Tender(Long id, String role, String description, String salary, String interviewStartDate, String interviewEndDate, String country, String city, String province, String category, String type, Double longitude, Double latitude, String address, TenderAssortments tenderAssortments, String interviewStartTiming, String interviewEndTiming, Boolean isActive, User tenderPoster) {
+    public Tender(Long id, String role, String description, String salary, String interviewStartDate, String interviewEndDate, String country, String city, String province, String category, String type, Double longitude, Double latitude, String address, List<TenderAssortments> tenderAssortments, String interviewStartTiming, String interviewEndTiming, Boolean isActive, User tenderPoster, String tenderType) {
         this.id = id;
         this.role = role;
         this.description = description;
@@ -113,6 +114,7 @@ public class Tender{
         this.interviewEndTiming = interviewEndTiming;
         this.isActive = isActive;
         this.tenderPoster = tenderPoster;
+        this.tenderType = tenderType;
     }
 
     public Long getId() {
@@ -227,11 +229,11 @@ public class Tender{
         this.address = address;
     }
 
-    public TenderAssortments getTenderAssortments() {
+    public List<TenderAssortments> getTenderAssortments() {
         return tenderAssortments;
     }
 
-    public void setTenderAssortments(TenderAssortments tenderAssortments) {
+    public void setTenderAssortments(List<TenderAssortments> tenderAssortments) {
         this.tenderAssortments = tenderAssortments;
     }
 

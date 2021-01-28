@@ -1,5 +1,6 @@
 package com.example.jobBoard.Repository;
 
+import com.example.jobBoard.Dto.RidersLocationDTO;
 import com.example.jobBoard.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,11 @@ public interface UserDaoRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from user u where u.name like %:search%",nativeQuery = true)
     public List<User> searchUser(@Param("search") String search);
+
+    public List<User> findByUserType(String userType);
+
+    @Query(value="SELECT new com.example.jobBoard.Dto.RidersLocationDTO(u.id,u.name,u.email,u.password,u.active,u.userType,u.profileActive,l.longitude,l.latitude,u.userOnlineStatus)"+
+         "from User u INNER JOIN Location l ON (l.user.id=u.id)"+
+            "where u.userType='Rider'")
+    List<RidersLocationDTO> getAllRidersLocation();
 }

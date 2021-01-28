@@ -25,7 +25,7 @@ public class TenderAssortments {
     @JsonIgnoreProperties("tender_assortments")
     User recruiter;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tender_id", referencedColumnName = "id")
     @JsonIgnoreProperties("tender_assortments")
     Tender tender;

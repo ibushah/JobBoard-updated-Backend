@@ -142,7 +142,7 @@ public class TenderService {
 
     }
 
-    protected void saveInTenderAssortMents(Tender tender,TenderDTO tenderDTO,String notificationFrom,String notificationFor){
+    public void saveInTenderAssortMents(Tender tender,TenderDTO tenderDTO,String notificationFrom,String notificationFor){
         //
         TenderAssortments tenderAssortments = new TenderAssortments();
         User employerUser = userDaoRepository.findById(tenderDTO.getEmployerUserId()).get();

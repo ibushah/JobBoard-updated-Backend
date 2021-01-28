@@ -11,6 +11,7 @@ public class TenderDTO implements Serializable {
     Long id;
     String role;
     String description;
+    Long tenderId;
 
 
     String salary;
@@ -41,7 +42,16 @@ public class TenderDTO implements Serializable {
     String tenderType;
     Boolean isActive;
 
+
     public TenderDTO() {
+    }
+
+    public Long getTenderId() {
+        return tenderId;
+    }
+
+    public void setTenderId(Long tenderId) {
+        this.tenderId = tenderId;
     }
 
     public String getTenderType() {

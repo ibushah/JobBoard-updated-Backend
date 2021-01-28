@@ -16,11 +16,17 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("*")
                 .withSockJS();
+        registry.addEndpoint("/ro").setAllowedOrigins("*").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker("/topic");
+        registry.setApplicationDestinationPrefixes("/appNew");
+        registry.enableSimpleBroker("/topicNew");
+
     }
+
+
 }

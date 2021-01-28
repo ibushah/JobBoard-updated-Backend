@@ -3,11 +3,12 @@ package com.example.jobBoard.Controller;
 import com.example.jobBoard.Commons.ApiResponse;
 import com.example.jobBoard.Commons.AuthToken;
 import com.example.jobBoard.Config.JwtTokenUtil;
-import com.example.jobBoard.Dto.LoginUser;
-import com.example.jobBoard.Dto.UserDto;
-import com.example.jobBoard.Model.Profile;
+import com.example.jobBoard.Dto.*;
+import com.example.jobBoard.Model.Location;
 import com.example.jobBoard.Model.User;
+import com.example.jobBoard.Repository.LocationRepository;
 import com.example.jobBoard.Repository.ProfileRepository;
+import com.example.jobBoard.Repository.UserDaoRepository;
 import com.example.jobBoard.Service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -29,10 +29,15 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private LocationRepository locationRepository;
+
+    @Autowired
+    private UserDaoRepository userDaoRepository;
+
+    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-
     @Qualifier("myUserService")
     private UserServiceImpl userService;
 
@@ -86,4 +91,34 @@ public class AuthenticationController {
 
         return userService.findById(id);
     }
+
+    @GetMapping("/forgotPassword/{email}")
+    public ApiResponse forgotPassword(@PathVariable ("email") String email){
+        return userService.forgotPasswordEmail(email);
+
+    }
+    @PostMapping("/resetPassword")
+    public ApiResponse resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO){
+        return userService.resetPassword(resetPasswordDTO);
+
+    }
+
+    @PostMapping("/riderstatus")
+    public ApiResponse changeUserActivityStatus(@RequestBody RiderStatusDTO riderStatusDTO){
+        return userService.changingUserOnlineStatus(riderStatusDTO);
+
+    }
+    @GetMapping("/allRiders")
+    public List<User> getAllRidersActive(){
+        return userDaoRepository.findByUserType("Rider");
+    }
+
+
+    @GetMapping("/getAllLocations")
+    public List<RidersLocationDTO> getAllLocation(){
+        return userDaoRepository.getAllRidersLocation();
+    }
+
+
+
 }

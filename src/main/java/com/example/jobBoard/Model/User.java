@@ -27,6 +27,8 @@ public class User implements Serializable {
     private String userType;
     @Column
     private Boolean profileActive;
+    @Column
+    private Boolean userOnlineStatus;
 
 
     @OneToOne(mappedBy = "user")
@@ -63,18 +65,19 @@ public class User implements Serializable {
 //    List<ReviewAndRating> reviewAndRatingsForCandidate;
 
 
-
-
-    public User(String email, String name, String password, Boolean active, String userType, Boolean profileActive, Profile profile, List<Job> jobList, Set<AppliedFor> appliedForSet, List<RecruiterJob> recruiterJobs) {
+    public User(Long id, String email, String name, String password, Boolean active, String userType, Boolean profileActive, Boolean userOnlineStatus, Profile profile, List<Job> jobList, Set<AppliedFor> appliedForSet, Set<AppliedForRecruiterJob> appliedForRecruiterSet, List<RecruiterJob> recruiterJobs) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;
         this.active = active;
         this.userType = userType;
         this.profileActive = profileActive;
+        this.userOnlineStatus = userOnlineStatus;
         this.profile = profile;
         this.jobList = jobList;
         AppliedForSet = appliedForSet;
+        AppliedForRecruiterSet = appliedForRecruiterSet;
         this.recruiterJobs = recruiterJobs;
     }
 
@@ -200,7 +203,13 @@ public class User implements Serializable {
         AppliedForRecruiterSet = appliedForRecruiterSet;
     }
 
+    public Boolean getUserOnlineStatus() {
+        return userOnlineStatus;
+    }
 
+    public void setUserOnlineStatus(Boolean userOnlineStatus) {
+        this.userOnlineStatus = userOnlineStatus;
+    }
 }
 
 

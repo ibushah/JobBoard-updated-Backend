@@ -83,7 +83,20 @@ public class TenderController {
         return new ApiResponse(400,"CORRECT AGE",null);
     }
 
+    @PostMapping("/publicTenderInvitation")
+    public ApiResponse inviteToRecruiterOnPublicTender(@RequestBody TenderDTO tenderDTO){
+        Tender tender=tenderRepository.getOne(tenderDTO.getTenderId());
+        try {
+            tenderService.saveInTenderAssortMents(tender,tenderDTO,"employer","recruiter");
+            return new ApiResponse(200,"Invitation send",null);
+        }catch (Exception e){
+            return new ApiResponse(500,"something went wrong",null);
+        }
 
+
+
+
+}
 
 
 
